@@ -37,8 +37,11 @@ services:
     container_name: teamcity-agent
     environment:
       - SERVER_URL=http://teamcity-server:8111
+      - DOCKER_HOST=unix:///var/run/docker.sock
     depends_on:
       - teamcity-server
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
 
 volumes:
   teamcity_data:

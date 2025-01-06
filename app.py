@@ -62,4 +62,4 @@ def get_borrowed_books():
     return render_template('borrowed_books.html', borrowed_books=borrowed_books)
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0'
+    app.run(debug=True, host='0.0.0.0')

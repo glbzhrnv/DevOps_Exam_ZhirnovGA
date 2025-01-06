@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  flask-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: flask_app
+    ports:
+      - "5000:5000"  # Перенаправление порта Flask
+    volumes:
+      - .:/app  # Связываем локальную папку с контейнером
+    environment:
+      - FLASK_ENV=development  # Настройка Flask
+      - DATABASE_URL=sqlite:///database/e_library.db  # Указание пути к SQLite
+    depends_on:
+      - db  # Указываем, что сервис Flask зависит от базы данных
+
+  db:
+    image: nouchka/sqlite3  # SQLite контейнер
+    container_name: sqlite_db
+    volumes:
+      - ./database:/database  # Связываем локальную папку с базой
+    command: "tail -f /dev/null"  # SQLite не требует постоянного выполнения
+
+  teamcity-server:
+    image: jetbrains/teamcity-server:2023.05
+    container_name: teamcity-server
+    ports:
+      - "8111:8111"  # Порт TeamCity
+    volumes:
+      - teamcity_data:/data/teamcity_server/datadir
+      - teamcity_logs:/opt/teamcity/logs
+
+  teamcity-agent:
+    image: jetbrains/teamcity-agent:2023.05
+    container_name: teamcity-agent
+    environment:
+      - SERVER_URL=http://teamcity-server:8111
+    depends_on:
+      - teamcity-server
+
+volumes:
+  teamcity_data:
+  teamcity_logs:

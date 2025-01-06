@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Books</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1>Available Books</h1>
+
+        <table class="table table-striped mt-3">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Author</th>
+                    {% if borrowed_books %}
+                    <th>Publisher</th>
+                    <th>Borrow Date</th>
+                    <th>Return Date</th>
+                    {% endif %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for book in books %}
+                <tr>
+                    <td>{{ book.title }}</td>
+                    <td>{{ book.author }}</td>
+                    {% if borrowed_books %}
+                    <td>{{ book.publisher }}</td>
+                    <td>
+                        {% for borrowed in borrowed_books %}
+                        {% if borrowed.title == book.title %}
+                        {{ borrowed.borrow_date }}
+                        {% endif %}
+                        {% endfor %}
+                    </td>
+                    <td>
+                        {% for borrowed in borrowed_books %}
+                        {% if borrowed.title == book.title %}
+                        {{ borrowed.return_date }}
+                        {% endif %}
+                        {% endfor %}
+                    </td>
+                    {% endif %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        {% if not borrowed_books %}
+        <a href="/login" class="btn btn-info mt-3">Login to see borrowed books</a>
+        {% endif %}
+    </div>
+</body>
+</html>

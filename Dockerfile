@@ -10,6 +10,8 @@ COPY . .
 # Устанавливаем зависимости
 RUN pip install --no-cache-dir -r requirements.txt
 
+RUN pip install flake8
+
 # Открываем порт
 EXPOSE 5000
 
